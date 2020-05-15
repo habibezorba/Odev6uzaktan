@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Hesap Makinesi</title>
+    
+    <style>
+    
+
+/* quick reset so all our padding is the right size */
+* {
+  box-sizing: border-box;
+}
+
+.calculator input,
+.calc-button   {
+  font-family: 'Times New Roman', Times, serif;
+}
+
+/* add some spacing */
+body          {
+  background: rgb(236, 179, 141);
+  padding-bottom: 30px;
+  padding-top: 30px;  
+}
+
+/* limit the width and center */
+.calculator   {
+  max-width: 400px;
+  margin: 0 auto;
+  border: 5px solid black;
+  border-radius: 10px;
+}
+
+.calculator input   {
+  /* reset basic form styles */
+  background: none;
+  border: none;
+  box-shadow: none;
+  outline: none;
+
+  padding: 20px 10px;
+  width: 100%;
+  border-bottom: 3px solid black;
+  color: #333;
+  text-align: right;
+  font-size: 40px;
+  border-radius: 0;
+}
+
+.calc-button  {
+  background: rgba(0, 0, 0, 0.5); /* light background with opacity 50% */
+  border: 2px solid #111; /* black border */
+  padding: 20px;
+  color: white; /* white text */
+  border-radius: 10px; /* rounded corners */
+  font-size: 22px; /* larger fonts */
+  cursor: pointer; /* make it look clickable */
+  grid-auto-rows: auto;
+
+}
+
+.calculator-buttons {
+  /* small spacing within our container */
+  padding: 20px;
+
+  /* the grid stuff! */
+  display: grid;
+
+  /* create 4 columns */
+  grid-template-columns: 1fr 1fr 1fr 2fr;
+
+  /* add the grid gap */
+  grid-gap: 10px;
+}
+
+/* span across 3 columns */
+.is-zero,
+.is-clear   {
+  grid-column: span 3;
+}
+
+/* go blue */
+.is-clear   {
+  background: rgb(204, 86, 7);
+}
+
+.is-equals {
+  background:rgb(204, 86, 7);
+}
+h1{
+    text-align: center;
+}
+.calculator-buttons button:hover{
+    background-color: rgb(6, 56, 51);
+}
+
+    </style>
+
+</head>
+
+<body>
+    <h1>HESAP MAKİNESİ</h1>
+<div class="calculator">
+    
+
+  <!-- the input -->
+  <input type=" text" id="screen" class="screen" value="0" disabled style="background-color:rgb(204, 86, 7);color:white;" />
+
+  <!-- the buttons -->
+  <div class="calculator-buttons">
+    <button type="button" class="calc-button is-clear" value="clear " id="clear">C</button>
+    <button type="button" value="/ " class="calc-button"style="background-color: rgb(204, 86, 7);">&divide;</button>
+
+    <button type="button" value="7 " class="calc-button">7</button>
+    <button type="button"  value="8 " class="calc-button">8</button>
+    <button type="button"  value="9 " class="calc-button">9</button>
+    <button type="button"  value="* " class="calc-button" style="background-color: rgb(204, 86, 7);">&times;</button>
+
+    <button type="button" value="4 " class="calc-button">4</button>
+    <button type="button" value="5 " class="calc-button">5</button>
+    <button type="button" value="6 " class="calc-button">6</button>
+    <button type="button" value="-"  class="calc-button"style="background-color: rgb(204, 86, 7);">&minus;</button>
+
+    <button type="button" value="1 " class="calc-button">1</button>
+    <button type="button" value="2 " class="calc-button">2</button>
+    <button type="button" value="3 " class="calc-button">3</button>
+    <button type="button" value="+ " class="calc-button"style="background-color:rgb(204, 86, 7);">&plus;</button>
+
+    <button type="button" value="( " class="calc-button">(</button>
+    <button type="button" value=") " class="calc-button">)</button>
+    <button type="button" value=". " class="calc-button">.</button>
+    <button type="button" class="calc-button is-equals" value="=" id="equals">&equals;</button>
+    
+
+    <button type="button" value="0" class="calc-button is-zero">0</button>
+   
+    
+  </div>
+  
+</div>
+    <script>
+        var calculator = {
+    result: 0,
+    operations: "",
+    //calculate result
+    calculate: function() {
+        try {
+            this.result = eval(this.operations);
+            if (!(Number.isInteger(this.result)))
+                this.result = this.result.toFixed(10);
+            if (this.result == null || this.result == undefined)
+                this.result = '0';
+        } catch (error) {
+            console.log(error);
+            this.result = "Syntax Error";
+            this.clear();
+        }
+
+    },
+    //clear operations
+    clear: function() {
+        this.operations = "";
+    },
+    //add new operator
+    addOperator: function(operator) {
+
+        this.operations = "".concat(this.operations, operator.trim());
+        this.operations.trim();
+    },
+
+
+};
+
+//update ui for changes
+function updateUI() {
+
+    display.value = calculator.operations;
+    //   .split("").reverse().join("");
+}
+
+//display result
+function displayResult() {
+    display.value = calculator.result;
+}
+
+//main flow start
+var display = document.getElementById("screen");
+var allButtons = document.getElementsByTagName("button");
+//handle click event
+[...allButtons].forEach(element => {
+
+    element.addEventListener('click', function() {
+        if (element.id == "clear") {
+            calculator.clear();
+            updateUI();
+        } else if (element.id == "equals") {
+            calculator.calculate();
+            calculator.clear();
+            updateUI();
+            displayResult();
+        } else {
+            calculator.addOperator(element.value);
+            updateUI();
+        }
+    });
+});
+    </script>
+</body>
+
+</html>
